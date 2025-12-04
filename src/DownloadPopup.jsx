@@ -6,6 +6,7 @@ import './DownloadPopup.css';
 
 const DownloadPopup = ({ onClose }) => {
   const [releaseContent, setReleaseContent] = useState('');
+  const isVercel = import.meta.env.VERCEL_ENV; // Vercel injects this ENV variable
 
   useEffect(() => {
     // Fetch the content of ContohRelease.md
@@ -44,7 +45,7 @@ const DownloadPopup = ({ onClose }) => {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{releaseContent}</ReactMarkdown>
         </div>
         <p className="download-cta">
-          Enjoy our application with all these amazing features!
+          {isVercel ? "Enjoy our application hosted on Vercel!" : "Enjoy our application with all these amazing features!"}
         </p>
         <div className="download-button-container">
           <a href="https://github.com/yohanesokta/Timers/releases" target="_blank" rel="noopener noreferrer" className="download-button">

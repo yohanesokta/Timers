@@ -13,17 +13,6 @@ Selamat datang di rilis pertama **Timer App**! Aplikasi timer minimalis dan mode
 - **Watermark**: Terdapat watermark elegan dengan logo GitHub di pojok kiri atas.
 
 
-## 📦 File Unduhan
-
-Berikut adalah daftar file aplikasi yang dapat Anda unduh. Pastikan untuk mengunduh versi yang sesuai dengan sistem operasi Anda.
-
-| File                                      | Sistem Operasi | Arsitektur | Checksum SHA-256                                                 |
-| ----------------------------------------- | -------------- | ---------- | ---------------------------------------------------------------- |
-| `timers_0.1.0_x64_en-US.msi`                | Windows        | x64        | `(ganti dengan checksum setelah build)`                          |
-| `timers_0.1.0_x64-setup.exe`              | Windows        | x64        | `(ganti dengan checksum setelah build)`                          |
-| `timers_0.1.0_amd64.AppImage`             | Linux          | x64        | `(ganti dengan checksum setelah build)`                          |
-| `timers_0.1.0_amd64.deb`                  | Linux (Debian) | x64        | `(ganti dengan checksum setelah build)`                          |
-
 ### Cara Verifikasi Checksum (Opsional)
 
 Untuk memastikan integritas file yang Anda unduh, Anda dapat memverifikasi checksum SHA-256.

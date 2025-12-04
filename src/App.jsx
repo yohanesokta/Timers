@@ -8,10 +8,10 @@ function App() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    // Check if the app is running in a browser and not as a Tauri app
-    const isRunningInBrowser = typeof window !== 'undefined' && !window.__TAURI__;
+    // Show popup only if the URL contains 'vercel'
+    const shouldShowPopup = typeof window !== 'undefined' && window.location.href.includes('vercel');
 
-    if (isRunningInBrowser) {
+    if (shouldShowPopup) {
       const timer = setTimeout(() => {
         setShowPopup(true);
       }, 1000); // Show popup after 1 second
