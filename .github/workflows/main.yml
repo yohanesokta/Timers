@@ -71,6 +71,9 @@ jobs:
   deploy-to-github-pages:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    permissions:
+      pages: write      # For publishing to GitHub Pages
+      id-token: write   # For OIDC authentication
     if: github.ref == 'refs/heads/main' # Only deploy on push to main branch
     steps:
       - name: Checkout repository
