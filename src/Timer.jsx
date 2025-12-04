@@ -3,49 +3,60 @@ import './Timer.css';
 
 const padTime = (time) => time.toString().padStart(2, '0');
 
-// Create an audio context to be reused
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 function Timer() {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
+  const initialTimeSet = useRef(false);
 
   const [timeLeft, setTimeLeft] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const timerRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const startTimeRef = useRef(0);
+  const totalDurationRef = useRef(0);
 
   useEffect(() => {
-    let animationFrameId;
-    if (isRunning && timeLeft > 0) {
-      let lastTime = performance.now();
-      const animate = (now) => {
-        const deltaTime = now - lastTime;
-        if (deltaTime >= 10) { // Update roughly every 10ms
-          setTimeLeft(prev => prev - deltaTime);
-          lastTime = now;
-        }
-        if (timeLeft > 10) {
-            animationFrameId = requestAnimationFrame(animate);
-        } else {
-            // Final countdown with higher precision
-            setTimeLeft(0);
-        }
-      };
-      animationFrameId = requestAnimationFrame(animate);
-    } else if (timeLeft <= 0 && isRunning) {
-      setIsRunning(false);
-      setTimeLeft(0);
-      playSound();
+    if (!initialTimeSet.current) {
+        setTimeLeft((minutes * 60 + seconds) * 1000);
     }
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isRunning, timeLeft]);
+  }, [minutes, seconds]);
 
+  useEffect(() => {
+    if (isRunning) {
+      startTimeRef.current = performance.now() - (totalDurationRef.current - timeLeft);
+      animationFrameRef.current = requestAnimationFrame(animate);
+    }
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [isRunning]);
+
+  const animate = (now) => {
+    const elapsedTime = now - startTimeRef.current;
+    const remaining = totalDurationRef.current - elapsedTime;
+
+    if (remaining <= 0) {
+      setTimeLeft(0);
+      setIsRunning(false);
+      playSound();
+      return;
+    }
+
+    setTimeLeft(remaining);
+    animationFrameRef.current = requestAnimationFrame(animate);
+  };
 
   const handleStart = () => {
-    // Set initial time when starting
+    if (minutes === 0 && seconds === 0) return;
+
     const totalMilliseconds = (minutes * 60 + seconds) * 1000;
+    totalDurationRef.current = totalMilliseconds;
     setTimeLeft(totalMilliseconds);
     setIsRunning(true);
+    initialTimeSet.current = true;
   };
 
   const handleStop = () => {
@@ -54,13 +65,11 @@ function Timer() {
 
   const handleReset = () => {
     setIsRunning(false);
-    // Reset display to the initial set time, not 0
-    const totalMilliseconds = (minutes * 60 + seconds) * 1000;
-    setTimeLeft(totalMilliseconds);
+    setTimeLeft((minutes * 60 + seconds) * 1000);
+    initialTimeSet.current = false;
   };
 
   const playSound = () => {
-    // Simple beep sound using Web Audio API
     if (audioContext.state === 'suspended') {
         audioContext.resume();
     }
@@ -68,10 +77,9 @@ function Timer() {
     const gainNode = audioContext.createGain();
 
     oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(880, audioContext.currentTime); // A5 note
+    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
     gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1);
-
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
@@ -81,45 +89,57 @@ function Timer() {
   };
 
   const formatTime = (time) => {
-    if (time < 0) time = 0;
-    const mins = padTime(Math.floor(time / (60 * 1000)));
-    const secs = padTime(Math.floor((time % (60 * 1000)) / 1000));
-    const millis = padTime(Math.floor((time % 1000) / 10));
-    return `${mins}:${secs}:${millis}`;
+    const t = time < 0 ? 0 : time;
+    const mins = padTime(Math.floor(t / (60 * 1000)));
+    const secs = padTime(Math.floor((t % (60 * 1000)) / 1000));
+    const millis = padTime(Math.floor((t % 1000) / 10));
+    return { mins, secs, millis };
   };
 
+  const { mins, secs, millis } = formatTime(timeLeft);
   const isDramatic = timeLeft < 3000 && timeLeft > 0;
+  const canStart = !isRunning && (minutes > 0 || seconds > 0);
+  const showReset = !isRunning && (timeLeft > 0 || initialTimeSet.current);
 
   return (
     <div className="timer-container">
       <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`}>
-        {formatTime(timeLeft)}
+        <span className="time-part">{mins}</span>
+        <span className="separator">:</span>
+        <span className="time-part">{secs}</span>
+        <span className="separator">:</span>
+        <span className="time-part">{millis}</span>
       </div>
-      <div className="input-group">
-        <input
-            type="number"
-            value={padTime(minutes)}
-            onChange={(e) => setMinutes(Math.max(0, parseInt(e.target.value, 10)))}
-            disabled={isRunning}
-            min="0"
-        />
-        <span>:</span>
-        <input
-            type="number"
-            value={padTime(seconds)}
-            onChange={(e) => setSeconds(Math.max(0, Math.min(59, parseInt(e.target.value, 10))))}
-            disabled={isRunning}
-            min="0"
-            max="59"
-        />
-      </div>
+
+      {!isRunning && (
+        <div className="input-group">
+          <input
+              type="number"
+              value={padTime(minutes)}
+              onChange={(e) => {
+                const val = parseInt(e.target.value, 10);
+                setMinutes(Math.max(0, isNaN(val) ? 0 : val));
+              }}
+              min="0"
+          />
+          <span>:</span>
+          <input
+              type="number"
+              value={padTime(seconds)}
+              onChange={(e) => {
+                const val = parseInt(e.target.value, 10);
+                setSeconds(Math.max(0, Math.min(59, isNaN(val) ? 0 : val)));
+              }}
+              min="0"
+              max="59"
+          />
+        </div>
+      )}
+
       <div className="controls">
-        {!isRunning ? (
-          <button onClick={handleStart} disabled={(minutes === 0 && seconds === 0) || isRunning}>Start</button>
-        ) : (
-          <button onClick={handleStop}>Stop</button>
-        )}
-        {!isRunning && <button onClick={handleReset}>Reset</button>}
+        {canStart && <button onClick={handleStart}>Start</button>}
+        {isRunning && <button onClick={handleStop}>Stop</button>}
+        {showReset && <button onClick={handleReset}>Reset</button>}
       </div>
     </div>
   );
