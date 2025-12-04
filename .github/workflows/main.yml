@@ -67,3 +67,32 @@ jobs:
           files: artifacts/*/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-to-github-pages:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build-and-test # Ensure desktop build and tests pass first
+    if: github.ref == 'refs/heads/main' # Only deploy on push to main branch
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build web application
+        run: VITE_APP_ENV=github-pages npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: '' # Set CNAME if you have a custom domain, otherwise leave empty
+          # If you want to force push, add: force_orphan: true

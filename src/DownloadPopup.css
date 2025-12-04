@@ -1,0 +1,151 @@
+.download-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.download-popup-content {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a); /* Subtle dark gradient */
+  color: #e0e0e0; /* Lighter text for contrast */
+  padding: 35px; /* Slightly more padding */
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* More pronounced shadow */
+  max-width: 650px; /* Slightly wider */
+  width: 90%;
+  position: relative;
+  max-height: 85vh; /* Slightly taller */
+  overflow-y: auto;
+  animation: fadeInScale 0.4s ease-out forwards; /* Slightly longer animation */
+  border: 1px solid #3a3a3a; /* Subtle border */
+
+  /* Custom Scrollbar for Webkit browsers */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #64ffda #333; /* Firefox */
+}
+
+/* Webkit scrollbar styles */
+.download-popup-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.download-popup-content::-webkit-scrollbar-track {
+  background: #333; /* Darker track */
+  border-radius: 5px;
+}
+
+.download-popup-content::-webkit-scrollbar-thumb {
+  background-color: #64ffda; /* Vibrant thumb color */
+  border-radius: 5px;
+  border: 2px solid #333; /* Border to match track */
+}
+
+.download-popup-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 2em; /* Larger close button */
+  color: #bdbdbd; /* Softer close button color */
+  cursor: pointer;
+  line-height: 1;
+  padding: 5px;
+  transition: color 0.2s ease;
+}
+
+.download-popup-close:hover {
+  color: #ffffff; /* White on hover */
+}
+
+.download-popup-content h2 {
+  font-size: 2.8em; /* Larger title */
+  color: #64ffda; /* More vibrant title color */
+  margin-bottom: 25px;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(100, 255, 218, 0.4); /* Glow effect */
+  letter-spacing: 1px; /* Slightly more spaced letters */
+}
+
+.release-features {
+  font-size: 1.05em; /* Slightly adjusted font size */
+  line-height: 1.7;
+  margin-bottom: 25px; /* More spacing */
+  margin-top: 20px; /* Added top margin for separation */
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.2); /* Slightly darker background for features */
+  border-radius: 8px;
+}
+
+.release-features h3 {
+  color: #ffeb3b; /* Brighter gold for subheadings */
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.3em;
+}
+
+.release-features ul {
+  list-style-type: none; /* Remove default bullet */
+  margin-left: 0;
+  padding-left: 15px; /* Indent list items */
+}
+
+.release-features li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px; /* Space for custom bullet */
+}
+
+.release-features li::before {
+  content: '⚡'; /* Custom bullet */
+  position: absolute;
+  left: 0;
+  color: #64ffda;
+}
+
+.download-cta {
+  text-align: center;
+  font-size: 1.3em; /* Larger and bolder */
+  font-weight: bold;
+  color: #bb86fc; /* A distinct, modern color */
+  margin-top: 30px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 5px rgba(187, 134, 252, 0.3);
+}
+
+.download-button-container {
+  text-align: center;
+  margin-top: 25px; /* More margin */
+}
+
+.download-button-container.top-button-container {
+  margin-bottom: 25px; /* Add margin below the top button */
+}
+
+.download-button {
+  display: inline-block;
+  padding: 14px 30px; /* Larger button */
+  background: linear-gradient(45deg, #64ffda, #00b894); /* Gradient button */
+  color: #1a1a1a; /* Dark text for contrast */
+  text-decoration: none;
+  border-radius: 8px; /* More rounded */
+  font-size: 1.2em; /* Larger font */
+  font-weight: bold;
+  transition: all 0.3s ease; /* Smooth transition for all properties */
+  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4); /* Glow shadow */
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.download-button:hover {
+  background: linear-gradient(45deg, #00b894, #64ffda); /* Reverse gradient on hover */
+  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 6px 20px rgba(0, 184, 148, 0.6); /* Enhanced glow */
+  color: #000000;
+}
