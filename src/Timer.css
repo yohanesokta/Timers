@@ -1,3 +1,6 @@
+/* =================================
+   SHARED STYLES
+   ================================= */
 .timer-container {
   display: flex;
   flex-direction: column;
@@ -5,31 +8,28 @@
   justify-content: center;
   height: 100vh;
   padding: 1rem;
-  background-color: #000000;
-  color: #ffffff;
-  font-family: 'Orbitron', sans-serif;
   overflow: hidden;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
 }
 
-.fullscreen-button {
+.top-controls {
   position: absolute;
   top: 20px;
   right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.fullscreen-button, .theme-button {
   background: transparent;
   border: none;
-  color: #555;
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
   transition: all 0.2s ease-in-out;
 }
-
-.fullscreen-button:hover {
-  color: #fff;
-  background-color: #333;
-}
-
 
 .timer-display {
   display: flex;
@@ -37,13 +37,14 @@
   justify-content: center;
   font-size: clamp(4rem, 20vmin, 18rem);
   font-weight: 700;
-  margin-bottom: 2rem;
-  letter-spacing: 0.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
   white-space: nowrap;
 }
 
 .time-part {
-  width: 2.2ch;
+  width: 1.8ch;
+  line-height: 1;
   text-align: center;
   display: inline-block;
 }
@@ -52,9 +53,23 @@
   margin: 0 0.2em;
 }
 
-.timer-display.dramatic {
-  color: #ff0000;
-  animation: pulse 0.8s infinite;
+.progress-bar-container {
+  width: 50%;
+  max-width: 600px;
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.progress-bar-indicator {
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+  transform-origin: left;
+  /* The background color will be set by inline styles */
+  /* Add transitions for smooth transform and color changes */
+  transition: transform 0.2s ease-out, background-color 0.5s ease;
 }
 
 .input-group {
@@ -62,30 +77,21 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 2rem;
-    gap: 1rem;
+    gap: 0.5rem;
     font-size: clamp(1.5rem, 5vmin, 2.5rem);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Major Mono Display', monospace;
 }
 
 .input-group input {
     width: clamp(60px, 15vmin, 100px);
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-family: 'Major Mono Display', monospace;
+    font-weight: 400;
     font-size: inherit;
     text-align: center;
     border-radius: 12px;
-    background-color: #1c1c1e;
-    color: #fff;
-    border: 1px solid #3a3a3c;
     padding: 0.5rem 0;
     transition: all 0.2s ease-in-out;
     -moz-appearance: textfield;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #0a84ff;
-    background-color: #2c2c2e;
 }
 
 .input-group input::-webkit-outer-spin-button,
@@ -93,7 +99,6 @@
     -webkit-appearance: none;
     margin: 0;
 }
-
 
 .controls {
   display: flex;
@@ -103,29 +108,14 @@
 }
 
 .control-button {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Major Mono Display', monospace;
   font-size: clamp(1rem, 3vmin, 1.2rem);
-  font-weight: 500;
+  font-weight: 400;
   min-width: 140px;
   padding: 0.8rem 1.5rem;
-  
-  /* macOS style */
-  background-color: #2c2c2e;
-  border: 1px solid transparent;
-  color: #fff;
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-}
-
-.control-button:hover:not(:disabled) {
-  background-color: #3a3a3c;
-}
-
-.control-button:disabled {
-    background-color: #1c1c1e;
-    color: #545458;
-    cursor: not-allowed;
 }
 
 @keyframes pulse {
@@ -134,8 +124,97 @@
   100% { transform: scale(1); }
 }
 
+/* =================================
+   DARK THEME (Overrides)
+   ================================= */
+.timer-container.theme-dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+.theme-dark .top-controls button {
+  color: #555;
+}
+.theme-dark .top-controls button:hover {
+  color: #fff;
+  background-color: #333;
+}
+.theme-dark .input-group input {
+  background-color: #1c1c1e;
+  color: #fff;
+  border: 1px solid #3a3a3c;
+}
+.theme-dark .input-group input:focus {
+  border-color: #0a84ff;
+  background-color: #2c2c2e;
+}
+.theme-dark .control-button {
+  background-color: #2c2c2e;
+  border: 1px solid transparent;
+  color: #fff;
+}
+.theme-dark .control-button:hover:not(:disabled) {
+  background-color: #3a3a3c;
+}
+.theme-dark .control-button:disabled {
+  background-color: #1c1c1e;
+  color: #545458;
+}
+.theme-dark .progress-bar-container {
+  background-color: #333;
+}
+.theme-dark .timer-display.dramatic {
+  color: #ff0000;
+}
+
+
+/* =================================
+   LIGHT THEME (Overrides)
+   ================================= */
+.timer-container.theme-light {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+.theme-light .top-controls button {
+  color: #888;
+}
+.theme-light .top-controls button:hover {
+  color: #000;
+  background-color: #ddd;
+}
+.theme-light .input-group input {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+}
+.theme-light .input-group input:focus {
+  border-color: #007aff;
+  background-color: #fff;
+}
+.theme-light .control-button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #000;
+}
+.theme-light .control-button:hover:not(:disabled) {
+  background-color: #e8e8e8;
+}
+.theme-light .control-button:disabled {
+  background-color: #f5f5f5;
+  color: #aaa;
+}
+.theme-light .progress-bar-container {
+  background-color: #ddd;
+}
+.theme-light .timer-display.dramatic {
+  color: #d00000;
+}
+
+
+/* =================================
+   MEDIA QUERIES
+   ================================= */
 @media (max-width: 480px) {
-  .timer-display { letter-spacing: 0.2rem; }
+  .timer-display { letter-spacing: 0.1em; }
   .controls {
     flex-direction: column;
     width: 80%;
@@ -143,7 +222,7 @@
   .control-button {
     width: 100%;
   }
-  .fullscreen-button {
+  .top-controls {
     top: 10px;
     right: 10px;
   }

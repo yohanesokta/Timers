@@ -17,6 +17,26 @@ const FullscreenExitIcon = () => (
     </svg>
 );
 
+const SunIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+);
+
+const MoonIcon = () => (
+     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+);
+
 
 function Timer() {
   const [minutes, setMinutes] = useState(0);
@@ -26,17 +46,28 @@ function Timer() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [theme, setTheme] = useState('dark');
   
+  // State for progress bar
+  const [progress, setProgress] = useState(100);
+  const [progressBarColor, setProgressBarColor] = useState('#4caf50');
+
   const animationFrameRef = useRef(null);
   const startTimeRef = useRef(0);
   const totalDurationRef = useRef(0);
 
+  // Effect to update time left when inputs change
   useEffect(() => {
-    if (!initialTimeSet.current) {
-        setTimeLeft((minutes * 60 + seconds) * 1000);
+    if (!isRunning) {
+        const newTime = (minutes * 60 + seconds) * 1000;
+        setTimeLeft(newTime);
+        if (!initialTimeSet.current) {
+            totalDurationRef.current = newTime;
+        }
     }
   }, [minutes, seconds]);
 
+  // Effect to handle fullscreen changes
   useEffect(() => {
     const handleFullscreenChange = () => {
         setIsFullscreen(!!document.fullscreenElement);
@@ -45,6 +76,7 @@ function Timer() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  // Effect to run the timer loop
   useEffect(() => {
     if (isRunning) {
       startTimeRef.current = performance.now() - (totalDurationRef.current - timeLeft);
@@ -56,6 +88,25 @@ function Timer() {
       }
     };
   }, [isRunning]);
+
+  // Effect to update progress bar WHEN timeLeft changes
+  useEffect(() => {
+    const getProgressBarColor = (percentage) => {
+        if (percentage > 50) return '#4caf50'; // Green
+        if (percentage > 20) return '#ffeb3b'; // Yellow
+        return '#f44336'; // Red
+    };
+
+    if (totalDurationRef.current > 0) {
+        const newProgress = (timeLeft / totalDurationRef.current) * 100;
+        setProgress(newProgress);
+        setProgressBarColor(getProgressBarColor(newProgress));
+    } else {
+        setProgress(100);
+        setProgressBarColor('#4caf50');
+    }
+  }, [timeLeft]);
+
 
   const animate = (now) => {
     const elapsedTime = now - startTimeRef.current;
@@ -77,7 +128,8 @@ function Timer() {
 
     const totalMilliseconds = (minutes * 60 + seconds) * 1000;
     totalDurationRef.current = totalMilliseconds;
-    setTimeLeft(totalMilliseconds);
+    // Set timeLeft here to ensure it's correct right at the start
+    setTimeLeft(totalMilliseconds); 
     setIsRunning(true);
     initialTimeSet.current = true;
   };
@@ -88,7 +140,9 @@ function Timer() {
 
   const handleReset = () => {
     setIsRunning(false);
-    setTimeLeft((minutes * 60 + seconds) * 1000);
+    const newTime = (minutes * 60 + seconds) * 1000;
+    setTimeLeft(newTime);
+    totalDurationRef.current = newTime;
     initialTimeSet.current = false;
   };
   
@@ -100,6 +154,10 @@ function Timer() {
             document.exitFullscreen();
         }
     }
+  };
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
   };
 
   const playSound = () => {
@@ -149,10 +207,15 @@ function Timer() {
   }
 
   return (
-    <div className="timer-container">
-      <button onClick={toggleFullscreen} className="fullscreen-button">
-        {isFullscreen ? <FullscreenExitIcon /> : <FullscreenEnterIcon />}
-      </button>
+    <div className={`timer-container theme-${theme}`}>
+      <div className="top-controls">
+        <button onClick={toggleTheme} className="theme-button">
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+        </button>
+        <button onClick={toggleFullscreen} className="fullscreen-button">
+            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenEnterIcon />}
+        </button>
+      </div>
 
       <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`} data-testid="timer-display">
         <span className="time-part" data-testid="minutes">{mins}</span>
@@ -160,6 +223,16 @@ function Timer() {
         <span className="time-part" data-testid="seconds">{secs}</span>
         <span className="separator">:</span>
         <span className="time-part" data-testid="milliseconds">{millis}</span>
+      </div>
+
+      <div className="progress-bar-container">
+        <div 
+          className="progress-bar-indicator" 
+          style={{ 
+            transform: `scaleX(${progress / 100})`,
+            backgroundColor: progressBarColor
+          }}
+        ></div>
       </div>
 
       {!isRunning && (
