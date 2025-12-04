@@ -5,6 +5,19 @@ const padTime = (time) => time.toString().padStart(2, '0');
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+const FullscreenEnterIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+);
+
+const FullscreenExitIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 8V5a2 2 0 0 1 2-2h3m11 0h-3a2 2 0 0 1-2 2v3m0 11v-3a2 2 0 0 1 2-2h3M8 19H5a2 2 0 0 1-2-2v-3"/>
+    </svg>
+);
+
+
 function Timer() {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
@@ -12,6 +25,8 @@ function Timer() {
 
   const [timeLeft, setTimeLeft] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  
   const animationFrameRef = useRef(null);
   const startTimeRef = useRef(0);
   const totalDurationRef = useRef(0);
@@ -21,6 +36,14 @@ function Timer() {
         setTimeLeft((minutes * 60 + seconds) * 1000);
     }
   }, [minutes, seconds]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+        setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   useEffect(() => {
     if (isRunning) {
@@ -68,6 +91,16 @@ function Timer() {
     setTimeLeft((minutes * 60 + seconds) * 1000);
     initialTimeSet.current = false;
   };
+  
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+  };
 
   const playSound = () => {
     if (audioContext.state === 'suspended') {
@@ -97,12 +130,30 @@ function Timer() {
   };
 
   const { mins, secs, millis } = formatTime(timeLeft);
-  const isDramatic = timeLeft < 3000 && timeLeft > 0;
-  const canStart = !isRunning && (minutes > 0 || seconds > 0);
-  const showReset = !isRunning && (timeLeft > 0 || initialTimeSet.current);
+  const isDramatic = timeLeft < 180000 && timeLeft > 0;
+  
+  const renderControls = () => {
+      if (isRunning) {
+          return <button onClick={handleStop} className="control-button">Stop</button>;
+      }
+      
+      const canStart = minutes > 0 || seconds > 0;
+      const showReset = timeLeft > 0 || initialTimeSet.current;
+
+      return (
+          <>
+            {canStart && <button onClick={handleStart} className="control-button">Start</button>}
+            {showReset && <button onClick={handleReset} className="control-button">Reset</button>}
+          </>
+      );
+  }
 
   return (
     <div className="timer-container">
+      <button onClick={toggleFullscreen} className="fullscreen-button">
+        {isFullscreen ? <FullscreenExitIcon /> : <FullscreenEnterIcon />}
+      </button>
+
       <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`}>
         <span className="time-part">{mins}</span>
         <span className="separator">:</span>
@@ -137,9 +188,7 @@ function Timer() {
       )}
 
       <div className="controls">
-        {canStart && <button onClick={handleStart}>Start</button>}
-        {isRunning && <button onClick={handleStop}>Stop</button>}
-        {showReset && <button onClick={handleReset}>Reset</button>}
+        {renderControls()}
       </div>
     </div>
   );

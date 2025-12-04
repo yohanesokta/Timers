@@ -4,6 +4,7 @@ body {
   font-family: 'Orbitron', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden; /* Disable main scrollbar */
 }
 
 .container {
