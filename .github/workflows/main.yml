@@ -85,26 +85,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Show current directory before install
-        run: pwd
-
       - name: Install dependencies
         run: npm install
 
-      - name: List files after install
-        run: ls -R
-
       - name: Build web application
         run: VITE_APP_ENV=github-pages npm run build
-
-      - name: Show current directory after build
-        run: pwd
-
-      - name: List files after build
-        run: ls -R
-
-      - name: Verify dist folder exists
-        run: ls -R dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

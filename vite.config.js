@@ -11,6 +11,9 @@ const base = isGitHubPages ? '/Timers/' : './'; // Assuming repository name is T
 export default defineConfig(async () => ({
   plugins: [react()],
   base: base, // Set base path conditionally
+  build: {
+    outDir: 'dist', // Explicitly set output directory to 'dist'
+  },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
