@@ -154,12 +154,12 @@ function Timer() {
         {isFullscreen ? <FullscreenExitIcon /> : <FullscreenEnterIcon />}
       </button>
 
-      <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`}>
-        <span className="time-part">{mins}</span>
+      <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`} data-testid="timer-display">
+        <span className="time-part" data-testid="minutes">{mins}</span>
         <span className="separator">:</span>
-        <span className="time-part">{secs}</span>
+        <span className="time-part" data-testid="seconds">{secs}</span>
         <span className="separator">:</span>
-        <span className="time-part">{millis}</span>
+        <span className="time-part" data-testid="milliseconds">{millis}</span>
       </div>
 
       {!isRunning && (
