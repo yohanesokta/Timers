@@ -255,3 +255,33 @@
     right: 10px;
   }
 }
+
+.watermark {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex; /* Keep flex for icon and text alignment */
+  align-items: center;
+  gap: 8px;
+  opacity: 0.5;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  transition: opacity 0.2s ease;
+}
+
+.watermark:hover {
+  opacity: 0.8;
+}
+
+.watermark svg {
+  fill: currentColor;
+}
+
+.theme-dark .watermark {
+  color: #fff;
+}
+
+.theme-light .watermark {
+  color: #000;
+}
