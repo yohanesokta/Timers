@@ -39,6 +39,7 @@ const MoonIcon = () => (
 
 
 function Timer() {
+  const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
   const initialTimeSet = useRef(false);
@@ -59,13 +60,13 @@ function Timer() {
   // Effect to update time left when inputs change
   useEffect(() => {
     if (!isRunning) {
-        const newTime = (minutes * 60 + seconds) * 1000;
+        const newTime = (hours * 3600 + minutes * 60 + seconds) * 1000;
         setTimeLeft(newTime);
         if (!initialTimeSet.current) {
             totalDurationRef.current = newTime;
         }
     }
-  }, [minutes, seconds]);
+  }, [hours, minutes, seconds]);
 
   // Effect to handle fullscreen changes
   useEffect(() => {
@@ -124,9 +125,9 @@ function Timer() {
   };
 
   const handleStart = () => {
-    if (minutes === 0 && seconds === 0) return;
+    if (hours === 0 && minutes === 0 && seconds === 0) return;
 
-    const totalMilliseconds = (minutes * 60 + seconds) * 1000;
+    const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
     totalDurationRef.current = totalMilliseconds;
     // Set timeLeft here to ensure it's correct right at the start
     setTimeLeft(totalMilliseconds); 
@@ -140,7 +141,7 @@ function Timer() {
 
   const handleReset = () => {
     setIsRunning(false);
-    const newTime = (minutes * 60 + seconds) * 1000;
+    const newTime = (hours * 3600 + minutes * 60 + seconds) * 1000;
     setTimeLeft(newTime);
     totalDurationRef.current = newTime;
     initialTimeSet.current = false;
@@ -181,13 +182,15 @@ function Timer() {
 
   const formatTime = (time) => {
     const t = time < 0 ? 0 : time;
-    const mins = padTime(Math.floor(t / (60 * 1000)));
+    const hrs = padTime(Math.floor(t / (3600 * 1000)));
+    const mins = padTime(Math.floor((t % (3600 * 1000)) / (60 * 1000)));
     const secs = padTime(Math.floor((t % (60 * 1000)) / 1000));
     const millis = padTime(Math.floor((t % 1000) / 10));
-    return { mins, secs, millis };
+    return { hrs, mins, secs, millis };
   };
 
-  const { mins, secs, millis } = formatTime(timeLeft);
+  const { hrs, mins, secs, millis } = formatTime(timeLeft);
+  // Dramatic effect now considers hours as well
   const isDramatic = timeLeft < 180000 && timeLeft > 0;
   
   const renderControls = () => {
@@ -195,7 +198,7 @@ function Timer() {
           return <button onClick={handleStop} className="control-button">Stop</button>;
       }
       
-      const canStart = minutes > 0 || seconds > 0;
+      const canStart = hours > 0 || minutes > 0 || seconds > 0;
       const showReset = timeLeft > 0 || initialTimeSet.current;
 
       return (
@@ -218,6 +221,12 @@ function Timer() {
       </div>
 
       <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`} data-testid="timer-display">
+        {parseInt(hrs) > 0 && ( // Conditionally render hours
+            <>
+                <span className="time-part" data-testid="hours">{hrs}</span>
+                <span className="separator">:</span>
+            </>
+        )}
         <span className="time-part" data-testid="minutes">{mins}</span>
         <span className="separator">:</span>
         <span className="time-part" data-testid="seconds">{secs}</span>
@@ -237,26 +246,47 @@ function Timer() {
 
       {!isRunning && (
         <div className="input-group">
-          <input
-              type="number"
-              value={padTime(minutes)}
-              onChange={(e) => {
-                const val = parseInt(e.target.value, 10);
-                setMinutes(Math.max(0, isNaN(val) ? 0 : val));
-              }}
-              min="0"
-          />
-          <span>:</span>
-          <input
-              type="number"
-              value={padTime(seconds)}
-              onChange={(e) => {
-                const val = parseInt(e.target.value, 10);
-                setSeconds(Math.max(0, Math.min(59, isNaN(val) ? 0 : val)));
-              }}
-              min="0"
-              max="59"
-          />
+          <div className="input-field-group">
+            <input
+                type="number"
+                value={padTime(hours)}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10);
+                  setHours(Math.max(0, isNaN(val) ? 0 : val));
+                }}
+                min="0"
+                data-testid="hours-input"
+            />
+            <span className="input-label-unit">Jam</span>
+          </div>
+          <span className="separator-input">:</span>
+          <div className="input-field-group">
+            <input
+                type="number"
+                value={padTime(minutes)}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10);
+                  setMinutes(Math.max(0, Math.min(59, isNaN(val) ? 0 : val)));
+                }}
+                min="0"
+                max="59"
+            />
+            <span className="input-label-unit">Menit</span>
+          </div>
+          <span className="separator-input">:</span>
+          <div className="input-field-group">
+            <input
+                type="number"
+                value={padTime(seconds)}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10);
+                  setSeconds(Math.max(0, Math.min(59, isNaN(val) ? 0 : val)));
+                }}
+                min="0"
+                max="59"
+            />
+            <span className="input-label-unit">Detik</span>
+          </div>
         </div>
       )}
 
@@ -266,5 +296,6 @@ function Timer() {
     </div>
   );
 }
+
 
 export default Timer;
