@@ -12,38 +12,38 @@
 }
 
 .download-popup-content {
-  background: linear-gradient(135deg, #2a2a2a, #1a1a1a); /* Subtle dark gradient */
-  color: #e0e0e0; /* Lighter text for contrast */
-  padding: 35px; /* Slightly more padding */
-  border-radius: 12px; /* Slightly more rounded corners */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* More pronounced shadow */
-  max-width: 650px; /* Slightly wider */
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  color: #e0e0e0;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  max-width: 650px;
   width: 90%;
   position: relative;
-  max-height: 85vh; /* Slightly taller */
+  max-height: 85vh;
   overflow-y: auto;
-  animation: fadeInScale 0.4s ease-out forwards; /* Slightly longer animation */
-  border: 1px solid #3a3a3a; /* Subtle border */
+  animation: fadeInScale 0.4s ease-out forwards;
+  border: 1px solid #3a3a3a;
 
-  /* Custom Scrollbar for Webkit browsers */
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #64ffda #333; /* Firefox */
+ 
+  scrollbar-width: thin;
+  scrollbar-color: #64ffda #333;
 }
 
-/* Webkit scrollbar styles */
+
 .download-popup-content::-webkit-scrollbar {
   width: 10px;
 }
 
 .download-popup-content::-webkit-scrollbar-track {
-  background: #333; /* Darker track */
+  background: #333;
   border-radius: 5px;
 }
 
 .download-popup-content::-webkit-scrollbar-thumb {
-  background-color: #64ffda; /* Vibrant thumb color */
+  background-color: #64ffda;
   border-radius: 5px;
-  border: 2px solid #333; /* Border to match track */
+  border: 2px solid #333;
 }
 
 .download-popup-close {
@@ -52,8 +52,8 @@
   right: 18px;
   background: none;
   border: none;
-  font-size: 2em; /* Larger close button */
-  color: #bdbdbd; /* Softer close button color */
+  font-size: 2em;
+  color: #bdbdbd;
   cursor: pointer;
   line-height: 1;
   padding: 5px;
@@ -61,49 +61,49 @@
 }
 
 .download-popup-close:hover {
-  color: #ffffff; /* White on hover */
+  color: #ffffff;
 }
 
 .download-popup-content h2 {
-  font-size: 2.8em; /* Larger title */
-  color: #64ffda; /* More vibrant title color */
+  font-size: 2.8em;
+  color: #64ffda;
   margin-bottom: 25px;
   text-align: center;
-  text-shadow: 0 0 10px rgba(100, 255, 218, 0.4); /* Glow effect */
-  letter-spacing: 1px; /* Slightly more spaced letters */
+  text-shadow: 0 0 10px rgba(100, 255, 218, 0.4);
+  letter-spacing: 1px;
 }
 
 .release-features {
-  font-size: 1.05em; /* Slightly adjusted font size */
+  font-size: 1.05em;
   line-height: 1.7;
-  margin-bottom: 25px; /* More spacing */
-  margin-top: 20px; /* Added top margin for separation */
+  margin-bottom: 25px;
+  margin-top: 20px;
   padding: 15px;
-  background-color: rgba(0, 0, 0, 0.2); /* Slightly darker background for features */
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
 }
 
 .release-features h3 {
-  color: #ffeb3b; /* Brighter gold for subheadings */
+  color: #ffeb3b;
   margin-top: 20px;
   margin-bottom: 10px;
   font-size: 1.3em;
 }
 
 .release-features ul {
-  list-style-type: none; /* Remove default bullet */
+  list-style-type: none;
   margin-left: 0;
-  padding-left: 15px; /* Indent list items */
+  padding-left: 15px;
 }
 
 .release-features li {
   margin-bottom: 10px;
   position: relative;
-  padding-left: 25px; /* Space for custom bullet */
+  padding-left: 25px;
 }
 
 .release-features li::before {
-  content: '⚡'; /* Custom bullet */
+  content: '⚡';
   position: absolute;
   left: 0;
   color: #64ffda;
@@ -111,9 +111,9 @@
 
 .download-cta {
   text-align: center;
-  font-size: 1.3em; /* Larger and bolder */
+  font-size: 1.3em;
   font-weight: bold;
-  color: #bb86fc; /* A distinct, modern color */
+  color: #bb86fc;
   margin-top: 30px;
   margin-bottom: 20px;
   text-shadow: 0 0 5px rgba(187, 134, 252, 0.3);
@@ -121,31 +121,31 @@
 
 .download-button-container {
   text-align: center;
-  margin-top: 25px; /* More margin */
+  margin-top: 25px;
 }
 
 .download-button-container.top-button-container {
-  margin-bottom: 25px; /* Add margin below the top button */
+  margin-bottom: 25px;
 }
 
 .download-button {
   display: inline-block;
-  padding: 14px 30px; /* Larger button */
-  background: linear-gradient(45deg, #64ffda, #00b894); /* Gradient button */
-  color: #1a1a1a; /* Dark text for contrast */
+  padding: 14px 30px;
+  background: linear-gradient(45deg, #64ffda, #00b894);
+  color: #1a1a1a;
   text-decoration: none;
-  border-radius: 8px; /* More rounded */
-  font-size: 1.2em; /* Larger font */
+  border-radius: 8px;
+  font-size: 1.2em;
   font-weight: bold;
-  transition: all 0.3s ease; /* Smooth transition for all properties */
-  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4); /* Glow shadow */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
   letter-spacing: 0.5px;
   border: none;
 }
 
 .download-button:hover {
-  background: linear-gradient(45deg, #00b894, #64ffda); /* Reverse gradient on hover */
-  transform: translateY(-3px); /* Lift effect */
-  box-shadow: 0 6px 20px rgba(0, 184, 148, 0.6); /* Enhanced glow */
+  background: linear-gradient(45deg, #00b894, #64ffda);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 184, 148, 0.6);
   color: #000000;
 }

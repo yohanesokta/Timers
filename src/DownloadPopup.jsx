@@ -6,10 +6,9 @@ import './DownloadPopup.css';
 
 const DownloadPopup = ({ onClose }) => {
   const [releaseContent, setReleaseContent] = useState('');
-  const isVercel = import.meta.env.VERCEL_ENV; // Vercel injects this ENV variable
+  const isVercel = import.meta.env.VERCEL_ENV; 
 
   useEffect(() => {
-    // Fetch the content of ContohRelease.md
     fetch('/ContohRelease.md')
       .then(response => {
         if (!response.ok) {
@@ -25,7 +24,6 @@ const DownloadPopup = ({ onClose }) => {
   }, []);
 
   const handleOverlayClick = (event) => {
-    // Close popup only if clicking directly on the overlay
     if (event.target.classList.contains('download-popup-overlay')) {
       onClose();
     }

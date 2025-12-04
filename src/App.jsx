@@ -8,13 +8,13 @@ function App() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    // Show popup only if the URL contains 'vercel'
+    
     const shouldShowPopup = typeof window !== 'undefined' && window.location.href.includes('vercel');
 
     if (shouldShowPopup) {
       const timer = setTimeout(() => {
         setShowPopup(true);
-      }, 1000); // Show popup after 1 second
+      }, 1000); 
       return () => clearTimeout(timer);
     }
   }, []);

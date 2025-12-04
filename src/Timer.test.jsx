@@ -3,8 +3,6 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Timer from './Timer';
 
-// Mocks are now in jest.setup.js
-
 describe('Timer Component', () => {
 
   beforeEach(() => {
@@ -18,18 +16,15 @@ describe('Timer Component', () => {
   test('renders initial state correctly', () => {
     render(<Timer />);
     
-    // Check initial time in display
-    expect(screen.queryByTestId('hours')).not.toBeInTheDocument(); // Hours not shown if 0
+    expect(screen.queryByTestId('hours')).not.toBeInTheDocument(); 
     expect(screen.getByTestId('minutes')).toHaveTextContent('00');
     expect(screen.getByTestId('seconds')).toHaveTextContent('05');
     expect(screen.getByTestId('milliseconds')).toHaveTextContent('00');
     
-    // Check initial input fields
     expect(screen.getByTestId('hours-input')).toHaveValue(0);
     expect(screen.getByTestId('minutes-input')).toHaveValue(0);
     expect(screen.getByTestId('seconds-input')).toHaveValue(5);
 
-    // Check initial buttons
     expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /reset/i })).toBeInTheDocument();
   });
@@ -64,8 +59,7 @@ describe('Timer Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /stop/i }));
     fireEvent.click(screen.getByRole('button', { name: /reset/i }));
 
-    // After reset, time should be back to initial 00:00:05:00
-    expect(screen.queryByTestId('hours')).not.toBeInTheDocument(); // Hours not shown if 0
+    expect(screen.queryByTestId('hours')).not.toBeInTheDocument(); 
     expect(screen.getByTestId('minutes')).toHaveTextContent('00');
     expect(screen.getByTestId('seconds')).toHaveTextContent('05');
     expect(screen.getByTestId('milliseconds')).toHaveTextContent('00');
@@ -74,14 +68,12 @@ describe('Timer Component', () => {
   test('hides inputs and reset button when running', () => {
     render(<Timer />);
     
-    // Inputs are visible initially
     expect(screen.getByTestId('hours-input')).toHaveValue(0);
     expect(screen.getByTestId('minutes-input')).toHaveValue(0);
     expect(screen.getByTestId('seconds-input')).toHaveValue(5);
 
     fireEvent.click(screen.getByRole('button', { name: /start/i }));
 
-    // Inputs and Reset button should be hidden
     expect(screen.queryByTestId('hours-input')).not.toBeInTheDocument();
     expect(screen.queryByTestId('minutes-input')).not.toBeInTheDocument();
     expect(screen.queryByTestId('seconds-input')).not.toBeInTheDocument();
@@ -114,22 +106,17 @@ describe('Timer Component', () => {
     const secondsInput = screen.getByTestId('seconds-input');
     const startButton = screen.getByRole('button', { name: /start/i });
 
-    // Set hours to 1
     fireEvent.change(hoursInput, { target: { value: '1' } });
     expect(hoursInput).toHaveValue(1);
     
-    // Set minutes to 10
     fireEvent.change(minutesInput, { target: { value: '10' } });
     expect(minutesInput).toHaveValue(10);
 
-    // Set seconds to 30
     fireEvent.change(secondsInput, { target: { value: '30' } });
     expect(secondsInput).toHaveValue(30);
 
-    // Start the timer
     fireEvent.click(startButton);
 
-    // After starting, hours, minutes, seconds should be displayed
     expect(screen.getByTestId('hours')).toHaveTextContent('01');
     expect(screen.getByTestId('minutes')).toHaveTextContent('10');
     expect(screen.getByTestId('seconds')).toHaveTextContent('30');

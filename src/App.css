@@ -1,8 +1,5 @@
-/* =================================
-   FONT-FACE DECLARATIONS
-   ================================= */
-/* This assumes you have a `public/fonts/` directory with the correct font files.
-   Vite serves the `public` directory at the root, so the URL path is `/fonts/...` */
+
+
 @font-face {
   font-family: 'Orbitron';
   src: url('/fonts/Orbitron-Regular.ttf') format('truetype');
@@ -25,13 +22,11 @@
   font-display: swap;
 }
 
-/* =================================
-   GLOBAL STYLES
-   ================================= */
+
 body {
   margin: 0;
   background-color: #000000;
-  /* Use Inter as a fallback system font */
+ 
   font-family: 'Major Mono Display', 'Courier New', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

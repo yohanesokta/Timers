@@ -56,7 +56,7 @@ function Timer() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [theme, setTheme] = useState('dark');
   
-  // State for progress bar
+  
   const [progress, setProgress] = useState(100);
   const [progressBarColor, setProgressBarColor] = useState('#4caf50');
 
@@ -64,7 +64,7 @@ function Timer() {
   const startTimeRef = useRef(0);
   const totalDurationRef = useRef(0);
 
-  // Effect to update time left when inputs change
+  
   useEffect(() => {
     if (!isRunning) {
         const newTime = (hours * 3600 + minutes * 60 + seconds) * 1000;
@@ -75,7 +75,7 @@ function Timer() {
     }
   }, [hours, minutes, seconds]);
 
-  // Effect to handle fullscreen changes
+  
   useEffect(() => {
     const handleFullscreenChange = () => {
         setIsFullscreen(!!document.fullscreenElement);
@@ -84,7 +84,7 @@ function Timer() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
-  // Effect to run the timer loop
+  
   useEffect(() => {
     if (isRunning) {
       startTimeRef.current = performance.now() - (totalDurationRef.current - timeLeft);
@@ -97,12 +97,12 @@ function Timer() {
     };
   }, [isRunning]);
 
-  // Effect to update progress bar WHEN timeLeft changes
+  
   useEffect(() => {
     const getProgressBarColor = (percentage) => {
-        if (percentage > 50) return '#4caf50'; // Green
-        if (percentage > 20) return '#ffeb3b'; // Yellow
-        return '#f44336'; // Red
+        if (percentage > 50) return '#4caf50'; 
+        if (percentage > 20) return '#ffeb3b'; 
+        return '#f44336'; 
     };
 
     if (totalDurationRef.current > 0) {
@@ -136,7 +136,7 @@ function Timer() {
 
     const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
     totalDurationRef.current = totalMilliseconds;
-    // Set timeLeft here to ensure it's correct right at the start
+    
     setTimeLeft(totalMilliseconds); 
     setIsRunning(true);
     initialTimeSet.current = true;
@@ -197,7 +197,7 @@ function Timer() {
   };
 
   const { hrs, mins, secs, millis } = formatTime(timeLeft);
-  // Dramatic effect now considers hours as well
+  
   const isDramatic = timeLeft < 180000 && timeLeft > 0;
   
   const renderControls = () => {
@@ -228,7 +228,7 @@ function Timer() {
       </div>
 
       <div className={`timer-display ${isDramatic ? 'dramatic' : ''}`} data-testid="timer-display">
-        {parseInt(hrs) > 0 && ( // Conditionally render hours
+        {parseInt(hrs) > 0 && ( 
             <>
                 <span className="time-part" data-testid="hours">{hrs}</span>
                 <span className="separator">:</span>
