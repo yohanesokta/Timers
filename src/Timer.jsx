@@ -219,7 +219,7 @@ function Timer() {
   return (
     <div className={`timer-container theme-${theme}`}>
       <div className="top-controls">
-        <button onClick={toggleTheme} className="theme-button">
+        <button onClick={toggleTheme} className="theme-button" aria-label="Toggle theme">
             {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
         </button>
         <button onClick={toggleFullscreen} className="fullscreen-button">
@@ -277,6 +277,7 @@ function Timer() {
                 }}
                 min="0"
                 max="59"
+                data-testid="minutes-input"
             />
             <span className="input-label-unit">Menit</span>
           </div>
@@ -291,6 +292,7 @@ function Timer() {
                 }}
                 min="0"
                 max="59"
+                data-testid="seconds-input"
             />
             <span className="input-label-unit">Detik</span>
           </div>
